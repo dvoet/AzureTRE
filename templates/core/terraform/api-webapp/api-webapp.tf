@@ -47,6 +47,7 @@ resource "azurerm_app_service" "api" {
     "SUBSCRIPTION_ID"                            = data.azurerm_subscription.current.subscription_id
     CORE_ADDRESS_SPACE                           = var.core_address_space
     TRE_ADDRESS_SPACE                            = var.tre_address_space
+    DEBUG                                        = "true"
   }
 
   identity {
