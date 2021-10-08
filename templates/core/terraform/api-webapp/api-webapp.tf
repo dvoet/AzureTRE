@@ -30,6 +30,7 @@ resource "azurerm_app_service" "api" {
     "XDT_MicrosoftApplicationInsights_Mode"      = "default"
     "WEBSITES_PORT"                              = "8000"
     "WEBSITE_VNET_ROUTE_ALL"                     = 1
+    "WEBSITE_DNS_SERVER"                         = "168.63.129.16"
     "DOCKER_REGISTRY_SERVER_URL"                 = "https://${var.docker_registry_server}"
     "STATE_STORE_ENDPOINT"                       = var.state_store_endpoint
     "COSMOSDB_ACCOUNT_NAME"                      = var.cosmosdb_account_name
@@ -45,9 +46,9 @@ resource "azurerm_app_service" "api" {
     "API_CLIENT_SECRET"                          = var.api_client_secret
     "RESOURCE_GROUP_NAME"                        = var.resource_group_name
     "SUBSCRIPTION_ID"                            = data.azurerm_subscription.current.subscription_id
-    CORE_ADDRESS_SPACE                           = var.core_address_space
-    TRE_ADDRESS_SPACE                            = var.tre_address_space
-    DEBUG                                        = "true"
+    "CORE_ADDRESS_SPACE"                         = var.core_address_space
+    "TRE_ADDRESS_SPACE"                          = var.tre_address_space
+    "DEBUG"                                      = "true"
   }
 
   identity {
