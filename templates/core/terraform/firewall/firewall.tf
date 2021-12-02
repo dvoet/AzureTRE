@@ -119,7 +119,9 @@ resource "azurerm_firewall_application_rule_collection" "shared_subnet" {
       "graph.microsoft.com",
       "login.microsoftonline.com",
       "aadcdn.msftauth.net",
-      "graph.windows.net"
+      "graph.windows.net",
+      "*.docker.io",
+      "*.docker.com"
     ]
 
     source_addresses = data.azurerm_subnet.shared.address_prefixes
@@ -321,3 +323,35 @@ resource "azurerm_firewall_application_rule_collection" "web_app_subnet" {
     azurerm_firewall_network_rule_collection.web_app_subnet
   ]
 }
+
+resource "azurerm_firewall_network_rule_collection" "allow_batch" {
+  name                = "nrc-allow_batch"
+  azure_firewall_name = azurerm_firewall.fw.name
+  resource_group_name = azurerm_firewall.fw.resource_group_name
+  priority            = 103
+  action              = "Allow"
+
+  rule {
+    name = "Azure-Batch"
+
+    protocols = [
+      "TCP"
+    ]
+
+    destination_addresses = [
+      "BatchNodeManagement"
+    ]
+
+    destination_ports = [
+      "443"
+    ]
+    source_addresses = [
+      "*"
+    ]
+  }
+
+  depends_on = [
+    azurerm_firewall_application_rule_collection.web_app_subnet
+  ]
+}
+

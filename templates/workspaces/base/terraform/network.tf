@@ -13,7 +13,6 @@ resource "azurerm_subnet" "services" {
   virtual_network_name = azurerm_virtual_network.ws.name
   resource_group_name  = azurerm_resource_group.ws.name
   address_prefixes     = [local.services_subnet_address_prefix]
-  service_endpoints    = ["Microsoft.Storage"]
   # notice that private endpoints do not adhere to NSG rules
   enforce_private_link_endpoint_network_policies = true
   enforce_private_link_service_network_policies  = true
@@ -214,6 +213,20 @@ resource "azurerm_network_security_rule" "allow-outbound-rdp-and-https-from-weba
   priority                    = 140
   protocol                    = "TCP"
   resource_group_name         = azurerm_resource_group.ws.name
+  source_port_range           = "*"
+}
+
+resource "azurerm_network_security_rule" "allow-outbound-to-batch" {
+  access                      = "Allow"
+  destination_address_prefix  = "BatchNodeManagement"
+  destination_port_range      = "443"
+  direction                   = "Outbound"
+  name                        = "allow-outbound-to-batch"
+  network_security_group_name = azurerm_network_security_group.ws.name
+  priority                    = 150
+  protocol                    = "Tcp"
+  resource_group_name         = azurerm_resource_group.ws.name
+  source_address_prefix       = "*"
   source_port_range           = "*"
 }
 

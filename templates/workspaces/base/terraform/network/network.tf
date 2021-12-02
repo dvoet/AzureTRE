@@ -184,6 +184,19 @@ resource "azurerm_network_security_rule" "allow-outbound-to-internet" {
   source_port_range           = "*"
 }
 
+resource "azurerm_network_security_rule" "allow-outbound-to-batch" {
+  access                      = "Allow"
+  destination_address_prefix  = "BatchNodeManagement"
+  destination_port_range      = "443"
+  direction                   = "Outbound"
+  name                        = "allow-outbound-to-batch"
+  network_security_group_name = azurerm_network_security_group.ws.name
+  priority                    = 150
+  protocol                    = "Tcp"
+  resource_group_name         = var.resource_group_name
+  source_address_prefix       = "*"
+  source_port_range           = "*"
+}
 
 resource "azurerm_network_security_rule" "allow-outbound-from-webapp-to-core-webapp" {
   access                      = "Allow"
